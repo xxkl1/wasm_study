@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body></body>
+<script>
+    const initWasm = async function (path) {
+        const res = await fetch(path).then(res => res.arrayBuffer())
+        return WebAssembly.instantiate(res)
+    }
+
+    const initWasmAdd = async function () {
+        const res = await initWasm('/add.wasm')
+        return res.instance.exports
+    }
+
+    const __main = async function () {
+        const { cppAdd } = await initWasmAdd()
+        console.log('result:', cppAdd(1, 2))
+    }
+
+    __main()
+</script>
+</html>
